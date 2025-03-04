@@ -164,12 +164,12 @@ const ReportChartView = ({ data }) => {
         />
         <MetricCard 
           title="Conversion Rate" 
-          value={`${(data.reduce((sum, item) => sum + item.conversionRate, 0) / data.length).toFixed(1)}%`}
+          value={`${(data.reduce((sum, item) => sum + (item.conversionRate || 0), 0) / data.length).toFixed(1)}%`}
           description="Visitors who completed a purchase"
         />
         <MetricCard 
           title="Churn Rate" 
-          value={`${(data.reduce((sum, item) => sum + item.churnRate, 0) / data.length).toFixed(1)}%`}
+          value={`${(data.reduce((sum, item) => sum + (item.churnRate || 0), 0) / data.length).toFixed(1)}%`}
           description="Customer attrition rate"
         />
       </div>
@@ -226,8 +226,8 @@ function processRevenueData(data) {
     const segmentData = data.slice(i * segmentSize, (i + 1) * segmentSize);
     if (segmentData.length === 0) break;
     
-    const totalRevenue = segmentData.reduce((sum, item) => sum + item.revenue, 0);
-    const totalTransactions = segmentData.reduce((sum, item) => sum + item.transactions, 0);
+    const totalRevenue = segmentData.reduce((sum, item) => sum + (item.revenue || 0), 0);
+    const totalTransactions = segmentData.reduce((sum, item) => sum + (item.transactions || 0), 0);
     
     segments.push({
       name: `Segment ${i + 1}`,
@@ -255,3 +255,4 @@ const MetricCard = ({ title, value, description }) => {
 };
 
 export default ReportChartView;
+
