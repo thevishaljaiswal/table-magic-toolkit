@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -9,24 +10,18 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DataItem } from "@/utils/data";
 import { Download, FileSpreadsheet, FileText, File, Check, Calendar } from "lucide-react";
 import { toast } from "sonner";
 
-interface ExportOptionsProps {
-  data: DataItem[];
-  visibleColumns: string[];
-}
-
-const ExportOptions: React.FC<ExportOptionsProps> = ({ data, visibleColumns }) => {
+const ExportOptions = ({ data, visibleColumns }) => {
   const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
 
-  const convertToCSV = (data: DataItem[], columns: string[]): string => {
+  const convertToCSV = (data, columns) => {
     const header = columns.join(',');
     
     const rows = data.map(item => {
       return columns.map(col => {
-        const value = item[col as keyof DataItem];
+        const value = item[col];
         
         if (value instanceof Date) {
           return `"${value.toISOString()}"`;

@@ -1,6 +1,30 @@
 
 import { faker } from "@faker-js/faker";
 
+// Define the DataItem type for better type checking
+export const DataItemSchema = {
+  id: "string",
+  name: "string",
+  email: "string",
+  role: "string",
+  status: "string",
+  createdAt: "Date",
+  lastActive: "Date",
+  revenue: "number",
+  transactions: "number",
+  conversionRate: "number",
+  avgOrderValue: "number",
+  lifetimeValue: "number",
+  churnRate: "number",
+  region: "string",
+  country: "string",
+  city: "string",
+  device: "string",
+  browser: "string",
+  os: "string",
+  sentiment: "string",
+};
+
 // Generate random data for the report
 export function generateSampleData(count = 300) {
   return Array.from({ length: count }, (_, i) => ({
@@ -17,7 +41,7 @@ export function generateSampleData(count = 300) {
     avgOrderValue: faker.number.int({ min: 10, max: 500 }),
     lifetimeValue: faker.number.int({ min: 100, max: 10000 }),
     churnRate: faker.number.float({ min: 0, max: 30, precision: 0.1 }),
-    region: faker.location.region(),
+    region: faker.location.state(),
     country: faker.location.country(),
     city: faker.location.city(),
     device: faker.helpers.arrayElement(["Desktop", "Mobile", "Tablet"]),

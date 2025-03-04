@@ -3,9 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { BarChart3 } from "lucide-react";
 
 const Index = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -24,27 +27,22 @@ const Index = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-50 p-4">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl font-bold text-primary">Welcome to Your App</CardTitle>
+          <CardTitle className="text-3xl font-bold text-primary">Analytics Dashboard</CardTitle>
           <CardDescription>
-            {mounted ? "App is fully loaded" : "App is loading..."}
+            {mounted ? "Interactive data visualization and reporting tool" : "App is loading..."}
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-lg text-center mb-4">
-            Start building your amazing project here!
+        <CardContent className="space-y-6">
+          <p className="text-lg text-center">
+            Access comprehensive business analytics and reporting tools
           </p>
           <div className="flex justify-center">
             <Button 
-              onClick={() => {
-                console.log("Button clicked");
-                toast({
-                  title: "Button clicked",
-                  description: "The UI is responding to interactions",
-                });
-              }}
-              className="bg-primary hover:bg-primary/90"
+              onClick={() => navigate('/report')}
+              className="bg-primary hover:bg-primary/90 flex items-center gap-2"
             >
-              Click Me
+              <BarChart3 className="h-4 w-4" />
+              View Full Report
             </Button>
           </div>
         </CardContent>
