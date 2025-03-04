@@ -1,11 +1,11 @@
 
-import { ColumnDef } from "@/components/DataTable";
-import { DataItem, formatCurrency, formatDate, formatPercent } from "./data";
+import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, ChevronDown, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { DataItem } from "./data";
 
 // Helper function to create column definitions with common properties
 function createColumn<T extends keyof DataItem>(
@@ -245,3 +245,27 @@ export const columns: ColumnDef<DataItem>[] = [
     meta: { className: "text-right" },
   },
 ];
+
+// Missing utility functions implied in the column definitions
+import { format } from "date-fns";
+
+export function formatDate(date: Date): string {
+  return format(date, "MMM d, yyyy");
+}
+
+export function formatCurrency(value: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(value);
+}
+
+export function formatPercent(value: number): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "percent",
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1
+  }).format(value / 100);
+}
