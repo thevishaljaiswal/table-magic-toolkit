@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,69 +6,62 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 222 10% 19%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 10% 19%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222 10% 19%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 222 47% 30%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 20% 98%;
+    --secondary-foreground: 222 47% 22%;
 
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 222 10% 38%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 220 35% 96.5%;
+    --accent-foreground: 222 47% 22%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 222 47% 30%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 20 14% 4%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 220 11% 6%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 14% 5%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 210 65% 60%;
+    --primary-foreground: 222 47% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 217.2 32.6% 12%;
     --muted-foreground: 215 20.2% 65.1%;
 
     --accent: 217.2 32.6% 17.5%;
@@ -76,9 +70,10 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
+    --border: 217.2 32.6% 13%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --ring: 212.7 75% 70%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -96,6 +91,230 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full transition-colors;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+
+  /* Data Table Custom Styles */
+  .data-table-container {
+    @apply w-full overflow-hidden rounded-lg bg-card shadow-subtle transition-all duration-300;
+  }
+
+  .data-table {
+    @apply w-full border-collapse;
+  }
+
+  .data-table thead {
+    @apply bg-secondary/60 backdrop-blur-sm sticky top-0 z-10;
+  }
+
+  .data-table th {
+    @apply px-4 py-3 text-left text-sm font-medium text-muted-foreground transition-all duration-250 ease-apple;
+    user-select: none;
+  }
+
+  .data-table td {
+    @apply px-4 py-3 text-sm border-t border-border/40 transition-all duration-250 ease-apple;
+  }
+
+  .data-table tbody tr {
+    @apply transition-colors duration-250 ease-apple;
+  }
+
+  .data-table tbody tr:hover {
+    @apply bg-accent/50;
+  }
+
+  .data-table tbody tr.selected {
+    @apply bg-primary/5;
+  }
+
+  .resizable-header {
+    @apply relative flex items-center space-x-1;
+  }
+
+  .resizer {
+    @apply absolute right-0 top-0 h-full w-1 bg-border/60 cursor-col-resize opacity-0 transition-opacity;
+  }
+
+  .resizer:hover,
+  .resizing {
+    @apply opacity-100;
+  }
+
+  .sortable-header {
+    @apply cursor-pointer hover:text-foreground;
+  }
+
+  .sort-direction {
+    @apply ml-1 h-4 w-4 transition-transform duration-250 ease-apple;
+  }
+
+  .expanded-row-content {
+    @apply bg-secondary/40 px-4 py-3 animate-slide-in-up;
+  }
+
+  .filter-badge {
+    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary hover:bg-primary/20;
+  }
+
+  /* Chart Styles */
+  .chart-container {
+    @apply mt-4 p-4 bg-card rounded-lg shadow-subtle animate-fade-in;
+  }
+
+  /* Transitions for DataTable Components */
+  .data-table-enter {
+    @apply opacity-0;
+  }
+
+  .data-table-enter-active {
+    @apply opacity-100 transition-opacity duration-300;
+  }
+
+  .data-table-exit {
+    @apply opacity-100;
+  }
+
+  .data-table-exit-active {
+    @apply opacity-0 transition-opacity duration-300;
+  }
+
+  /* Drag & Drop Styles */
+  .column-dragging {
+    @apply opacity-50 cursor-grabbing;
+  }
+
+  .column-drag-over {
+    @apply bg-primary/5;
+  }
+
+  .column-drop-indicator {
+    @apply absolute h-full w-1 bg-primary/50 rounded-full;
+  }
+
+  /* Status Indicators */
+  .status-indicator {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors;
+  }
+
+  .status-positive {
+    @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400;
+  }
+
+  .status-warning {
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400;
+  }
+
+  .status-negative {
+    @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400;
+  }
+
+  .status-neutral {
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400;
+  }
+
+  /* Loading States */
+  .shimmer {
+    @apply relative overflow-hidden;
+  }
+
+  .shimmer::after {
+    content: '';
+    @apply absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer;
+  }
+
+  /* Glassmorphism Effects */
+  .glassmorphism {
+    @apply backdrop-blur-sm bg-white/70 dark:bg-black/30 border border-white/20 dark:border-white/10;
+  }
+
+  /* Tooltip & Popover Animations */
+  .tooltip-enter {
+    @apply opacity-0 scale-95;
+  }
+
+  .tooltip-enter-active {
+    @apply opacity-100 scale-100 transition-all duration-200 ease-apple;
+  }
+
+  .tooltip-exit {
+    @apply opacity-100 scale-100;
+  }
+
+  .tooltip-exit-active {
+    @apply opacity-0 scale-95 transition-all duration-150 ease-apple;
+  }
+
+  /* Elegant Button Styles */
+  .btn-elegant {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background;
+  }
+
+  .btn-elegant-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 active:scale-[0.98] transition-all duration-200;
+  }
+
+  .btn-elegant-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 active:scale-[0.98] transition-all duration-200;
+  }
+
+  .btn-elegant-ghost {
+    @apply hover:bg-accent hover:text-accent-foreground active:scale-[0.98] transition-all duration-200;
+  }
+
+  /* Toolbar Styles */
+  .toolbar {
+    @apply flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 p-4 border-b;
+  }
+
+  .toolbar-section {
+    @apply flex flex-wrap items-center gap-2;
+  }
+
+  /* Pagination Styles */
+  .pagination {
+    @apply flex items-center justify-between px-2;
+  }
+
+  .pagination-info {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .pagination-buttons {
+    @apply flex items-center space-x-2;
+  }
+
+  /* Mobile Optimizations */
+  @media (max-width: 640px) {
+    .data-table-container {
+      @apply rounded-none shadow-none;
+    }
+    
+    .data-table {
+      @apply table-auto;
+    }
+    
+    .data-table th, 
+    .data-table td {
+      @apply px-2 py-2;
+    }
   }
 }
