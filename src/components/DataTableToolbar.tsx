@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -22,7 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, Search, Filter, X, ColumnsIcon, SlidersHorizontal, PlusCircle } from "lucide-react";
+import { Calendar as CalendarIcon, Search, Filter, X as CloseIcon, ColumnsIcon, SlidersHorizontal, PlusCircle } from "lucide-react";
 import ExportOptions from "@/components/ExportOptions";
 import { DataItem } from "@/utils/data";
 import { VisibilityState } from "@/utils/data";
@@ -64,15 +63,12 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
   const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  // Extract unique values for filter selects
   const statuses = Array.from(new Set(data.map(item => item.status)));
   const regions = Array.from(new Set(data.map(item => item.region)));
 
-  // Apply filters when they change
   useEffect(() => {
     let result = [...data];
 
-    // Apply each active filter
     activeFilters.forEach(filter => {
       switch (filter.type) {
         case 'search':
@@ -97,24 +93,20 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
             );
           }
           break;
-        // Add more filter types as needed
       }
     });
 
     setFilteredData(result);
   }, [activeFilters, data, setFilteredData]);
 
-  // Handle search input
   const handleSearch = (value: string) => {
     setSearchValue(value);
     
-    // If empty, remove search filter
     if (!value.trim()) {
       setActiveFilters(prev => prev.filter(f => f.type !== 'search'));
       return;
     }
     
-    // Add or update search filter
     const searchFilter: ActiveFilter = {
       id: 'search',
       type: 'search',
@@ -133,21 +125,17 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
     });
   };
 
-  // Handle date range selection
   const handleDateRangeChange = (range: { from: Date | undefined; to: Date | undefined }) => {
     setDateRange(range);
     
-    // If no range, remove date filter
     if (!range.from || !range.to) {
       setActiveFilters(prev => prev.filter(f => f.id !== 'dateRange'));
       return;
     }
     
-    // Format dates for display
     const fromStr = format(range.from, 'MMM d, yyyy');
     const toStr = format(range.to, 'MMM d, yyyy');
     
-    // Add or update date filter
     const dateFilter: ActiveFilter = {
       id: 'dateRange',
       type: 'date',
@@ -167,17 +155,14 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
     });
   };
 
-  // Handle status selection
   const handleStatusChange = (value: string) => {
     setSelectedStatus(value);
     
-    // If no selection, remove status filter
     if (!value) {
       setActiveFilters(prev => prev.filter(f => f.id !== 'status'));
       return;
     }
     
-    // Add or update status filter
     const statusFilter: ActiveFilter = {
       id: 'status',
       type: 'select',
@@ -197,17 +182,14 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
     });
   };
 
-  // Handle region selection
   const handleRegionChange = (value: string) => {
     setSelectedRegion(value);
     
-    // If no selection, remove region filter
     if (!value) {
       setActiveFilters(prev => prev.filter(f => f.id !== 'region'));
       return;
     }
     
-    // Add or update region filter
     const regionFilter: ActiveFilter = {
       id: 'region',
       type: 'select',
@@ -227,11 +209,9 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
     });
   };
 
-  // Remove a specific filter
   const removeFilter = (filterId: string) => {
     setActiveFilters(prev => prev.filter(f => f.id !== filterId));
     
-    // Reset the corresponding input
     switch (filterId) {
       case 'search':
         setSearchValue("");
@@ -248,7 +228,6 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
     }
   };
 
-  // Clear all filters
   const clearAllFilters = () => {
     setActiveFilters([]);
     setSearchValue("");
@@ -257,7 +236,6 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
     setSelectedRegion("");
   };
 
-  // Toggle column visibility
   const toggleColumnVisibility = (columnId: string) => {
     setColumnVisibility(prev => ({
       ...prev,
@@ -284,7 +262,7 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
                 className="absolute right-0 top-0 h-full px-3 text-muted-foreground hover:text-foreground"
                 onClick={() => handleSearch("")}
               >
-                <X className="h-4 w-4" />
+                <CloseIcon className="h-4 w-4" />
               </Button>
             )}
           </div>
@@ -330,10 +308,8 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
           />
         </div>
 
-        {/* Extended Filters */}
         {showFilters && (
           <div className="flex flex-wrap gap-2 mt-2 animate-slide-in-down">
-            {/* Date Range Filter */}
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -371,7 +347,6 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
               </PopoverContent>
             </Popover>
 
-            {/* Status Filter */}
             <Select value={selectedStatus} onValueChange={handleStatusChange}>
               <SelectTrigger
                 className={cn(
@@ -391,7 +366,6 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
               </SelectContent>
             </Select>
 
-            {/* Region Filter */}
             <Select value={selectedRegion} onValueChange={handleRegionChange}>
               <SelectTrigger
                 className={cn(
@@ -454,7 +428,6 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
           </div>
         )}
 
-        {/* Active Filters */}
         {activeFilters.length > 0 && (
           <div className="flex flex-wrap items-center gap-2 mt-2 animate-fade-in">
             {activeFilters.map((filter) => (
@@ -470,7 +443,7 @@ export const DataTableToolbar: React.FC<DataTableToolbarProps> = ({
                   className="h-4 w-4 p-0 ml-1 text-muted-foreground hover:text-foreground"
                   onClick={() => removeFilter(filter.id)}
                 >
-                  <Cross2Icon className="h-3 w-3" />
+                  <X className="h-3 w-3" />
                 </Button>
               </Badge>
             ))}

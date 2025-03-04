@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { 
@@ -11,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DataItem } from "@/utils/data";
-import { Download, FileSpreadsheet, FileText, FilePdf, Check, Calendar } from "lucide-react";
+import { Download, FileSpreadsheet, FileText, File, Check, Calendar } from "lucide-react";
 import { toast } from "sonner";
 
 interface ExportOptionsProps {
@@ -22,21 +21,16 @@ interface ExportOptionsProps {
 const ExportOptions: React.FC<ExportOptionsProps> = ({ data, visibleColumns }) => {
   const [scheduleDialogOpen, setScheduleDialogOpen] = useState(false);
 
-  // Function to convert data to CSV
   const convertToCSV = (data: DataItem[], columns: string[]): string => {
-    // Generate header row
     const header = columns.join(',');
     
-    // Generate data rows
     const rows = data.map(item => {
       return columns.map(col => {
         const value = item[col as keyof DataItem];
         
-        // Handle different value types
         if (value instanceof Date) {
           return `"${value.toISOString()}"`;
         } else if (typeof value === 'string') {
-          // Escape quotes in strings and wrap in quotes
           return `"${value.replace(/"/g, '""')}"`;
         } else {
           return String(value);
@@ -44,16 +38,12 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ data, visibleColumns }) =
       }).join(',');
     });
     
-    // Combine header and rows
     return [header, ...rows].join('\n');
   };
 
-  // Function to trigger download
   const downloadCSV = () => {
-    // Filter data to only include visible columns
     const csv = convertToCSV(data, visibleColumns);
     
-    // Create blob and download link
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -67,22 +57,18 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ data, visibleColumns }) =
     toast.success('CSV file downloaded successfully');
   };
 
-  // Mock function for Excel export
   const downloadExcel = () => {
     toast.success('Excel file downloaded successfully');
   };
 
-  // Mock function for PDF export
   const downloadPDF = () => {
     toast.success('PDF file downloaded successfully');
   };
 
-  // Function to mock schedule report
   const scheduleReport = () => {
     setScheduleDialogOpen(true);
   };
 
-  // Mock function to handle scheduling
   const handleScheduleSubmit = () => {
     setScheduleDialogOpen(false);
     toast.success('Report scheduled successfully');
@@ -109,7 +95,7 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ data, visibleColumns }) =
             Export as Excel
           </DropdownMenuItem>
           <DropdownMenuItem onClick={downloadPDF} className="flex items-center cursor-pointer">
-            <FilePdf className="h-4 w-4 mr-2" />
+            <File className="h-4 w-4 mr-2" />
             Export as PDF
           </DropdownMenuItem>
           <DropdownMenuSeparator />
@@ -120,7 +106,6 @@ const ExportOptions: React.FC<ExportOptionsProps> = ({ data, visibleColumns }) =
         </DropdownMenuContent>
       </DropdownMenu>
 
-      {/* Schedule Report Dialog */}
       <Dialog open={scheduleDialogOpen} onOpenChange={setScheduleDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
