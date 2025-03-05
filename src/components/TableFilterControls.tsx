@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
+import { X, Textarea } from "lucide-react";
 
 export const FilterControls = ({ filters, filterOptions, onFilterChange, onApplyFilters }) => {
   // Handle selection of dropdown filter options
@@ -32,6 +32,16 @@ export const FilterControls = ({ filters, filterOptions, onFilterChange, onApply
     });
   };
 
+  // Handle ID list input
+  const handleIdListChange = (event) => {
+    const idList = event.target.value
+      .split(',')
+      .map(id => id.trim())
+      .filter(id => id.length > 0);
+    
+    onFilterChange("ids", idList);
+  };
+
   // Reset all filters
   const handleResetFilters = () => {
     onFilterChange("status", []);
@@ -40,6 +50,7 @@ export const FilterControls = ({ filters, filterOptions, onFilterChange, onApply
     onFilterChange("revenue", { min: "", max: "" });
     onFilterChange("transactions", { min: "", max: "" });
     onFilterChange("conversionRate", { min: "", max: "" });
+    onFilterChange("ids", []);
   };
 
   // Remove a single filter selection
@@ -58,7 +69,8 @@ export const FilterControls = ({ filters, filterOptions, onFilterChange, onApply
       filters.transactions.min !== "" ||
       filters.transactions.max !== "" ||
       filters.conversionRate.min !== "" ||
-      filters.conversionRate.max !== ""
+      filters.conversionRate.max !== "" ||
+      filters.ids.length > 0
     );
   };
 
@@ -227,6 +239,25 @@ export const FilterControls = ({ filters, filterOptions, onFilterChange, onApply
               className="w-full"
             />
           </div>
+        </div>
+      </div>
+
+      {/* ID Filter */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium">Filter by IDs (comma separated)</label>
+        <div className="flex flex-col gap-2">
+          <Input
+            type="text"
+            placeholder="e.g. 1001, 1002, 1003"
+            value={filters.ids.join(', ')}
+            onChange={handleIdListChange}
+            className="w-full"
+          />
+          {filters.ids.length > 0 && (
+            <div className="text-sm text-muted-foreground">
+              {filters.ids.length} IDs entered
+            </div>
+          )}
         </div>
       </div>
 
