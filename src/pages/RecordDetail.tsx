@@ -104,35 +104,50 @@ const RecordDetail = () => {
         <Button className="bg-purple-600 hover:bg-purple-700">Contact Sales</Button>
       </div>
       
-      {/* Progress steps */}
-      <div className="w-full flex items-center mb-10 mt-8">
-        {steps.map((step, index) => {
-          const isActive = steps.indexOf(currentStep) >= index;
-          const isFirstStep = index === 0;
-          const isLastStep = index === steps.length - 1;
-          
-          return (
-            <div 
-              key={step} 
-              className={cn(
-                "h-2 flex-1",
-                isFirstStep && "rounded-l-full", 
-                isLastStep && "rounded-r-full",
-                isActive ? "bg-purple-500" : "bg-purple-200"
-              )}
-              onClick={() => goToStep(step)}
-            >
-              <div className="relative cursor-pointer">
-                <div className={cn(
-                  "absolute -top-8 left-0 text-sm font-medium",
-                  currentStep === step ? "text-purple-600" : "text-gray-500"
-                )}>
-                  {stepTitles[step]}
+      {/* Custom Stepper */}
+      <div className="w-full mt-8 mb-10">
+        <div className="flex relative">
+          {steps.map((step, index) => {
+            const isActive = steps.indexOf(currentStep) >= index;
+            const isCurrentStep = currentStep === step;
+            const isLastStep = index === steps.length - 1;
+            
+            return (
+              <React.Fragment key={step}>
+                <div 
+                  className={cn(
+                    "flex-1 py-3 px-4 cursor-pointer relative z-10",
+                    isActive && !isLastStep ? "bg-purple-200" : "",
+                    isCurrentStep ? "bg-purple-300" : "",
+                    !isActive ? "bg-gray-100" : "",
+                    isLastStep && isActive ? "bg-white" : "",
+                    index === 0 ? "rounded-l-md" : "",
+                    isLastStep ? "rounded-r-md" : ""
+                  )}
+                  onClick={() => goToStep(step)}
+                >
+                  <span className={cn(
+                    "font-medium",
+                    isActive ? "text-purple-800" : "text-gray-500"
+                  )}>
+                    {stepTitles[step]}
+                  </span>
+
+                  {!isLastStep && (
+                    <div 
+                      className={cn(
+                        "absolute right-[-8px] top-0 bottom-0 w-4 h-8 my-auto transform rotate-45 z-20",
+                        isActive ? "bg-purple-200" : "bg-gray-100",
+                        currentStep === steps[index + 1] ? "bg-purple-300" : ""
+                      )}
+                      style={{ clipPath: "polygon(0 0, 100% 50%, 0 100%)" }}
+                    />
+                  )}
                 </div>
-              </div>
-            </div>
-          );
-        })}
+              </React.Fragment>
+            );
+          })}
+        </div>
       </div>
       
       {/* Step content */}
