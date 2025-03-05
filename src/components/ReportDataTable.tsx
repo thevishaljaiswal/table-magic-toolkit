@@ -1,4 +1,3 @@
-
 import { useState, useMemo } from "react";
 import {
   Table,
@@ -62,6 +61,23 @@ interface DataItem {
   [key: string]: any;
 }
 
+// Define interface for range filters
+interface RangeFilter {
+  min: string;
+  max: string;
+}
+
+// Define structure for filters
+interface Filters {
+  status: string[];
+  region: string[];
+  sentiment: string[];
+  revenue: RangeFilter;
+  transactions: RangeFilter;
+  conversionRate: RangeFilter;
+  ids: string[];
+}
+
 interface ReportDataTableProps {
   data: DataItem[];
 }
@@ -92,14 +108,14 @@ const ReportDataTable = ({ data }: ReportDataTableProps) => {
   );
   const [selectedRows, setSelectedRows] = useState<(string | number)[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [filters, setFilters] = useState({
-    status: [] as string[],
-    region: [] as string[],
-    sentiment: [] as string[],
+  const [filters, setFilters] = useState<Filters>({
+    status: [],
+    region: [],
+    sentiment: [],
     revenue: { min: "", max: "" },
     transactions: { min: "", max: "" },
     conversionRate: { min: "", max: "" },
-    ids: [] as string[]
+    ids: []
   });
   
   // Column dragging state
@@ -135,23 +151,45 @@ const ReportDataTable = ({ data }: ReportDataTableProps) => {
     }
 
     // Apply dropdown filters
-    Object.entries(filters).forEach(([key, value]) => {
-      if (key === 'ids') return; // Skip IDs filter as we've already applied it
+    if (filters.status.length > 0) {
+      results = results.filter(item => filters.status.includes(item.status));
+    }
+    
+    if (filters.region.length > 0) {
+      results = results.filter(item => filters.region.includes(item.region));
+    }
+    
+    if (filters.sentiment.length > 0) {
+      results = results.filter(item => filters.sentiment.includes(item.sentiment));
+    }
 
-      if (Array.isArray(value) && value.length > 0) {
-        results = results.filter(item => value.includes(item[key]));
-      } else if (typeof value === 'object' && value !== null) {
-        // Range filters for numeric values
-        if (value.min !== "" || value.max !== "") {
-          results = results.filter(item => {
-            const numValue = Number(item[key]);
-            const min = value.min !== "" ? Number(value.min) : Number.MIN_SAFE_INTEGER;
-            const max = value.max !== "" ? Number(value.max) : Number.MAX_SAFE_INTEGER;
-            return numValue >= min && numValue <= max;
-          });
-        }
-      }
-    });
+    // Apply numeric range filters
+    if (filters.revenue.min !== "" || filters.revenue.max !== "") {
+      results = results.filter(item => {
+        const numValue = Number(item.revenue);
+        const min = filters.revenue.min !== "" ? Number(filters.revenue.min) : Number.MIN_SAFE_INTEGER;
+        const max = filters.revenue.max !== "" ? Number(filters.revenue.max) : Number.MAX_SAFE_INTEGER;
+        return numValue >= min && numValue <= max;
+      });
+    }
+
+    if (filters.transactions.min !== "" || filters.transactions.max !== "") {
+      results = results.filter(item => {
+        const numValue = Number(item.transactions);
+        const min = filters.transactions.min !== "" ? Number(filters.transactions.min) : Number.MIN_SAFE_INTEGER;
+        const max = filters.transactions.max !== "" ? Number(filters.transactions.max) : Number.MAX_SAFE_INTEGER;
+        return numValue >= min && numValue <= max;
+      });
+    }
+
+    if (filters.conversionRate.min !== "" || filters.conversionRate.max !== "") {
+      results = results.filter(item => {
+        const numValue = Number(item.conversionRate);
+        const min = filters.conversionRate.min !== "" ? Number(filters.conversionRate.min) : Number.MIN_SAFE_INTEGER;
+        const max = filters.conversionRate.max !== "" ? Number(filters.conversionRate.max) : Number.MAX_SAFE_INTEGER;
+        return numValue >= min && numValue <= max;
+      });
+    }
 
     setFilteredData(results);
   };
