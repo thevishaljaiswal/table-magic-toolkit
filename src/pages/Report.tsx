@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { generateSampleData } from "@/utils/data";
 import ReportDataTable from "@/components/ReportDataTable";
 import ReportChartView from "@/components/ReportChartView";
 import ExportOptions from "@/components/ExportOptions";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import { generateSampleData } from "@/utils/data";
 
 const Report = () => {
   const { toast } = useToast();
