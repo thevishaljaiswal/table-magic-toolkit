@@ -5,20 +5,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { generateSampleData } from "@/utils/data";
-import ReportDataTable from "@/components/ReportDataTable";
 import ReportChartView from "@/components/ReportChartView";
 import ExportOptions from "@/components/ExportOptions";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
+import TableComponent, { ColumnDef } from "@/components/ui/TableComponent";
 
 const Report = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [data] = useState(() => generateSampleData(50));
-  const [visibleColumns] = useState([
-    "id", "name", "email", "status", "revenue", "transactions", 
-    "conversionRate", "region", "sentiment"
-  ]);
+  
+  // Define columns for the table
+  const columns: ColumnDef[] = [
+    { id: "id", name: "ID", width: "80px" },
+    { id: "name", name: "Name" },
+    { id: "email", name: "Email" },
+    { id: "status", name: "Status", filterable: true },
+    { id: "revenue", name: "Revenue", numeric: true, filterable: true },
+    { id: "transactions", name: "Transactions", numeric: true, filterable: true },
+    { id: "conversionRate", name: "Conversion", numeric: true, filterable: true },
+    { id: "region", name: "Region", filterable: true },
+    { id: "sentiment", name: "Sentiment", filterable: true }
+  ];
+  
+  // Handle viewing details for a record
+  const handleViewDetails = (row: any) => {
+    navigate(`/record?id=${row.id}`);
+  };
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -32,7 +46,7 @@ const Report = () => {
           Back to Home
         </Button>
         
-        <ExportOptions data={data} visibleColumns={visibleColumns} />
+        <ExportOptions data={data} visibleColumns={columns.map(col => col.id)} />
       </div>
       
       <Card className="shadow-md">
@@ -52,7 +66,19 @@ const Report = () => {
             </div>
             
             <TabsContent value="table" className="pt-4">
-              <ReportDataTable data={data} />
+              <TableComponent 
+                data={data} 
+                columns={columns}
+                onViewDetails={handleViewDetails}
+                actions={{
+                  viewDetails: true,
+                  edit: true,
+                  delete: true,
+                }}
+                filterConfig={{
+                  filterable: true,
+                }}
+              />
             </TabsContent>
             
             <TabsContent value="charts" className="pt-4">
